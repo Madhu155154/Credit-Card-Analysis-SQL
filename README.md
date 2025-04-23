@@ -75,7 +75,7 @@ The dataset `credit_card_transaction.csv` was imported into SQL Server using the
 
 | File Name                             | Description                                                                 |
 |--------------------------------------|-----------------------------------------------------------------------------|
-| `create_database.sql`                | Creates and selects the credit_card database                               |
+| `Credit_card_transaction.CSV`        |    Data set : CSV File                                                      |
 | `question_01_top_spend_cities.sql`   | Top 5 cities by total spend and their percentage contribution               |
 | `question_02_highest_month.sql`      | Identifies the highest spend month for each card type                      |
 | `question_03_cumulative_million.sql` | Finds the transaction where each card type's cumulative spend reaches 1M   |
