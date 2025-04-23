@@ -1,30 +1,22 @@
 2 Write a query to print the highest spend month and amount spent in that month for each card type
 
-with a as (
-select card_type, month(transaction_date) as month_ , amount,
-case 
-when card_type = 'Silver' then amount else null 
-end as Silver,
-case 
-when card_type = 'Signature' then amount else null 
-end as Signature,
-case 
-when card_type = 'Gold' then amount else null 
-end as Gold,
-case 
-when card_type = 'Platinum' then amount else null 
-end as Platinum
+with cte as (
+select card_type,datepart(year,transaction_date) yt
+,datepart(month,transaction_date) mt,sum(amount) as total_spend
 from credit_card
-) 
-select top 1 month_, sum(amount) as total_spend , sum(Silver) as Silver , 
-sum(Signature) as Signature , sum(Gold) as Gold, 
-sum(Platinum) as Platinum
-from a 
-group by month_
-order by sum(amount) desc
+group by card_type,datepart(year,transaction_date),datepart(month,transaction_date)
+--order by card_type,total_spend desc
+)
+select * from (select *, rank() over(partition by card_type order by total_spend desc) as rn
+from cte) a where rn=1
+
 
 output: 
 
-| Month | Total Spend | Silver     | Signature  | Gold       | Platinum   |
-|-------|-------------|------------|------------|------------|------------|
-| 1     | 431209556   | 109359598  | 98919381   | 110146204  | 112784373  |
+| Card Type | YT   | MT | Total Spend | RN |
+|-----------|------|----|-------------|----|
+| Gold      | 2015 | 1  | 55455064    | 1  |
+| Platinum  | 2014 | 8  | 57936507    | 1  |
+| Signature | 2013 | 12 | 58799522    | 1  |
+| Silver    | 2015 | 3  | 59723549    | 1  |
+
